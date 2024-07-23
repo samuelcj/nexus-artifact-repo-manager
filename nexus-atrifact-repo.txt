@@ -1,0 +1,7 @@
+# NEXUS ARTIFACT REPOSITORY MANAGER
+
+In this project, I will be setting-up Nexus as an artifact repository manager in a cloud server (but I would be using ubuntu wsl).
+
+
+
+
