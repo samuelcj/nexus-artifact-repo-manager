@@ -1,7 +1,67 @@
 # NEXUS ARTIFACT REPOSITORY MANAGER
 
+Artifact repositories is where you store artifacrs of different format eg TAR, JAR, WAR, ZIP, etc. Nexus have both open source and commercial version.
+
 In this project, I will be setting-up Nexus as an artifact repository manager in a cloud server (but I would be using ubuntu wsl).
 
 
+You can host your own privately owned repository on nexus and you can also set a proxy to public reposirories like maven and npm repositories
 
+Nexux have a powerful and flexible rest API integration with it tools, to reduce manual processes.
+
+#STEPS
+
+1. Install java-version 8. That is what Nexux needs to eun.
+=> sudo apt-get install openjdk-8-jdk
+
+2. Install Nexux on our server in the /opt directory as root user
+=> wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+=> tar -zxvf latest-unix.tar.gz
+
+** Nexux Folder = Contains runtime and application for Nexus
+** Sonartype-work = Contains my own config for Nexus and data eg dependencies, IPs accessing Nexus, logs, uploaded files and metadata, ...
+
+3. Create a Nexus user and use it to start the service
+=> add user naxus
+
+4. change nexus files owner to be for nexus
+=> chown -R nexus:nexus nexus-3.28.1-01
+=> chown -R nexus:nexus sonatype-work
+
+5. Setup nexus configuration so it can run as the nexus-user, by editing the file in the nexus folder
+=> vim nexus-3.28.1-01/bin/nexus.rc
+##edit to becomee ##
+run_as_user="nexus"
+
+6. Switch user to nexus to run the service
+=> su - nexus
+
+7. Start the nexus service
+=> /opt/nexus-3.28.1-01/bin/nexus start
+
+8. To confirm that it is running.
+=> ps aux | grep nexus     # This shows the process ID
+or
+=> netstat -lnpt           # This shows the internet port (8081)
+
+9. Run the Nexus UI on your browser
+<private IP>:8081
+######### ref= image 1 and 2
+
+9. Nexus UI NOTES
+i. An Admin user is automatically created with 
+username: Admin
+password: <embedded in the admin.password file inside the sonatppe folder>
+NB: This would be changed on your first login.
+######## ref= image 3
+
+ii. You could create sub users to interact with the nexus platform also.
+
+iii. REPOSITORY TYPES
+######## ref= image 4
+- Proxy Repository: This is a repository that is a link to another repository and it heps with caching of artifacts eg maven-central and nuget.org repositories
+
+- Hosted Reposirory: They serve as the primary storage for artifacts and components for the company owned. More like private resources. eg maven-releases, maven-snapshots, nuget-hosted, etc... or for 3rd parties components that are not externally available. But can be referenced from commercial repositories. Hence serves like a private proxy.
+
+- 
 
