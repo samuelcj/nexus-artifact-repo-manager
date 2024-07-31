@@ -48,7 +48,7 @@ or
 <private IP>:8081
 ######### ref= image 1 and 2
 
-9. Nexus UI NOTES
+10. Nexus UI NOTES
 i. An Admin user is automatically created with 
 username: Admin
 password: <embedded in the admin.password file inside the sonatppe folder>
@@ -63,5 +63,11 @@ iii. REPOSITORY TYPES
 
 - Hosted Reposirory: They serve as the primary storage for artifacts and components for the company owned. More like private resources. eg maven-releases, maven-snapshots, nuget-hosted, etc... or for 3rd parties components that are not externally available. But can be referenced from commercial repositories. Hence serves like a private proxy.
 
-- 
+- Group Repository: This is used to combine multiple individual repositories serving different purposes to be behind a single grouped endpoint. eg maven-public, nuget-group, etc
 
+11. Creating Nexus User with Priviledge
+i. Create a nexus user to grant it permission to artifacts on the nexus UI (## ref= image 5)
+ii. Create a role in Nexus for the user to access Java based Artifact. (Note: Use the view priviledge type) (## ref= image 6 and 7)
+iii. Assign the newly created role to the newly created user as the only attached role. To maintain the principle of least priviledge.
+
+12. Configure a Java Project (Gradle) with Nexus 
