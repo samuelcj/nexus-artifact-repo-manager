@@ -37,7 +37,7 @@ run_as_user="nexus"
 => su - nexus
 
 7. Start the nexus service
-=> /opt/nexus-3.28.1-01/bin/nexus start
+=> /opt/nexus-3.70.1-02/bin/nexus start
 
 8. To confirm that it is running.
 => ps aux | grep nexus     # This shows the process ID
@@ -71,3 +71,39 @@ ii. Create a role in Nexus for the user to access Java based Artifact. (Note: Us
 iii. Assign the newly created role to the newly created user as the only attached role. To maintain the principle of least priviledge.
 
 12. Configure a Java Project (Gradle) with Nexus 
+i. In the build.gradle file, add the apply plugin, publishing and repository blocks.
+
+apply plugin: "maven-publish"
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifact("build/libs/my-app-$version" + ".jar") {
+                extension 'jar'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name "nexus"
+            url "http://172.22.159.46:8081/repository/maven-snapshots/"
+            credentials {
+                username project.repoUser
+                password project.repoPassword
+            }
+        }
+    }
+}
+
+
+ii. Then we create the gradle.properties file. where we define the username and password. and reference it in the build.gradle file.
+
+repoUser = samuelcj
+repoPassword = mypassword
+
+iii. Now we can run the build command in the terminal
+=> ./grawdlew build
+
+iv. We can now publish the jarfile (the artifact in the build/lil/ directory. using the command.
+=> ./gradlew publish          ######## ref= image 8 & 9
