@@ -73,12 +73,14 @@ iii. Assign the newly created role to the newly created user as the only attache
 12. Configure a Java Project (Gradle) with Nexus 
 i. In the build.gradle file, add the apply plugin, publishing and repository blocks.
 
+####### my added block for building my artifact and publishing to Nexus Artifact Repository ####
+
 apply plugin: "maven-publish"
 
 publishing {
     publications {
         maven(MavenPublication) {
-            artifact("build/libs/my-app-$version" + ".jar") {
+            artifact("build/libs/artifact-practice-gradle-app-$version" + ".jar") {
                 extension 'jar'
             }
         }
@@ -88,6 +90,7 @@ publishing {
         maven {
             name "nexus"
             url "http://172.22.159.46:8081/repository/maven-snapshots/"
+            allowInsecureProtocol true
             credentials {
                 username project.repoUser
                 password project.repoPassword
@@ -95,15 +98,71 @@ publishing {
         }
     }
 }
-
+########################################
 
 ii. Then we create the gradle.properties file. where we define the username and password. and reference it in the build.gradle file.
 
 repoUser = samuelcj
-repoPassword = mypassword
+repoPassword = XXXXXX
 
 iii. Now we can run the build command in the terminal
 => ./grawdlew build
 
 iv. We can now publish the jarfile (the artifact in the build/lil/ directory. using the command.
 => ./gradlew publish          ######## ref= image 8 & 9
+
+
+12. Configure a Java Maven Project with Nexus
+
+i. Replace the build block of code to represent the plugin block of code to the porm.xml file, so that maven can build and push to nexus.
+
+####### my added block for building my artifact and publishing to Nexus Artifact Repository ####
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        </plugins>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-snapshot</id>
+            <url>http://172.22.159.46:8081/reposirory/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+###################################
+#################################
+NB: Remember to refresh the project to sync the new plugin into the project.
+
+ii. Set up how maven will locate the Nexus repository usinf the distribution management part of the above code blocks
+
+iii. Configure credentials so Maven can authenticate with it using the nexus user. This is setup in the ".m2 folder" in the home directory (~).
+The credential file will be used by all maven project and it is called: "settings.xml". The content is shown below: 
+
+<settings>
+    <servers>
+        <server>
+            <id>nexus-snapshot</id>
+            <username>samuelcj</username>
+            <password>XXXXXXX</password>
+        </server>
+    </servers>
+</settings>
+
+iii. Next is to build and push the artifact to nexus from the command line. Using the following commands
+
+- mvn package		######## ref= image 10a & b
+- mvn deploy		######## refs= image 11a & b 
+

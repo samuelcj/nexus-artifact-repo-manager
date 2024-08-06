@@ -9,6 +9,8 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+####### my added block for building my artifact and publishing to Nexus Artifact Repository ####
+
 apply plugin: "maven-publish"
 
 publishing {
@@ -32,6 +34,7 @@ publishing {
         }
     }
 }
+##############################
 
 repositories {
     mavenCentral()
