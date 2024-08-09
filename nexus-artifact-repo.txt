@@ -166,3 +166,36 @@ iii. Next is to build and push the artifact to nexus from the command line. Usin
 - mvn package		######## ref= image 10a & b
 - mvn deploy		######## refs= image 11a & b 
 
+13. NEXUS API: Use in querying the nexus repository eg: which component? which repository?, what are the version? etc. Usually used more in our CI/CD process
+
+- We use tools like curl or wget to access the Nexus API. where we provide the user and credential information for the nexus user
+
+i. Let us query the repositories in a nexus endpoint:
+=> curl -u <username>:<password> -X GET '<nexus url>/<repository endpoint>/repositories'       ### examples are below
+
+=> curl -u samuelcj:<password> -X GET 'http://172.22.159.46:8081/service/rest/v1/repositories'  ###This is not safe as one can see your password from browser history
+
+=> curl -u samuelcj -X GET 'http://172.22.159.46:8081/service/rest/v1/repositories'    ### This is safer as it will prompt for the user password
+
+## The Result is shown below because the user has access to only one repository" But if we want to see all repos, we change the user to "admin"
+[ {
+  "name" : "maven-snapshots",
+  "format" : "maven2",
+  "type" : "hosted",
+  "url" : "http://172.22.159.46:8081/repository/maven-snapshots",
+  "attributes" : { }
+} ]
+
+#############
+
+
+ii. Listing all the components in a repository                            ####  ref= image 12
+=> curl -u <username>:<password> -X GET '<nexus url>/<repository endpoint>/components?repository=<specific repository name>'       ### examples are below
+=> curl -u samuelcj -X GET 'http://172.22.159.46:8081/service/rest/v1/components?repository=maven-snapshots'     ### For password safety
+=> curl -u <username>:<password> -X GET '<nexus url>/<repository endpoint>/components?repository=<specific component ID>'    ### This shows for a specific component and not all component in the repository.
+
+14. NEXUS BLOB STORAGE: This is what nexus is using to manage it repository per storage. It is the mechanism used to store the binary part of artifacts.
+- We can find the local configuration of the remote blob storage in the /opt/sonatype-work/nexus/ directory
+- You can create a new blob store fron the nexus artifact UI and attach new created repository to the new blob store.
+NB: You can,t change the blob store of an already created repository.
+
