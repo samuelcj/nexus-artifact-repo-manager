@@ -199,3 +199,11 @@ ii. Listing all the components in a repository                            ####  
 - You can create a new blob store fron the nexus artifact UI and attach new created repository to the new blob store.
 NB: You can,t change the blob store of an already created repository.
 
+
+15. CLEAN UP POLICY: Use to clean up the repository storage based on the policy specified, so we can keep our repository storage and artifacts up to date without unnecessary backlogs. 
+NB: After creating the clean-up policy, we need to attach or assign it to a repository.
+NB: The "CLEANUP TASK" only on the delete on the remote repository. This is called "SOFT DELETE" but then marks those components for deletion on the server, but don't delete them. But to delete the storage in our local, we use the "ADMIN COMPACT BLOB STORE" clean-up task/policy. This does the "HARD DELETE".
+
+
+
+
